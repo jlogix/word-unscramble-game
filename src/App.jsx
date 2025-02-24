@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
+import { DndContext, rectIntersection } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useInterval } from 'react-use';
 
 const words = [
-  "PYTHON", "JAVASCRIPT", "REACT", "HTML", "CSS", "NODE", "GITHUB", "TAILWIND", "BOOTSTRAP", "VITE"
+  "PYTHON", "JAVASCRIPT", "REACT", "HTML", "CSS", "NODE", "GITHUB", "TAILWIND", "BOOTSTRAP", "VITE", "APPLE", "BANANA"
 ];
 
 function shuffleWord(word) {
@@ -65,7 +65,7 @@ function SortableItem(props) {
       {...listeners}
       className="letter-tile"
     >
-      {letter}
+      {letter.split('-')[0]}
     </div>
   );
 }
@@ -75,7 +75,7 @@ function Word({ wordData, items, setItems, isBlinking, setIsBlinking }) {
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
+    if (active && over && active.id !== over.id) {
       const oldIndex = items.indexOf(active.id);
       const newIndex = items.indexOf(over.id);
 
@@ -99,7 +99,7 @@ function Word({ wordData, items, setItems, isBlinking, setIsBlinking }) {
 
   return (
     <div className="word-container">
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+      <DndContext collisionDetection={rectIntersection} onDragEnd={handleDragEnd}>
         <SortableContext items={items} strategy={verticalListSortingStrategy}>
           <div className={`letter-tiles-container ${isBlinking ? 'blinking' : ''}`}>
             {items.map((letter, index) => (
@@ -125,7 +125,7 @@ function App() {
   const [wordStates, setWordStates] = useState(
     puzzle.map((wordData) => ({
       word: wordData.word,
-      items: wordData.scrambled.split(''),
+      items: wordData.scrambled.split('').map((letter, index) => `${letter}-${index}`),
       isBlinking: false,
     }))
   );
@@ -134,7 +134,7 @@ function App() {
     setWordStates(
       puzzle.map((wordData) => ({
         word: wordData.word,
-        items: wordData.scrambled.split(''),
+        items: wordData.scrambled.split('').map((letter, index) => `${letter}-${index}`),
         isBlinking: false,
       }))
     );
@@ -178,7 +178,8 @@ function App() {
           items={wordStates[index].items}
           setItems={(newItems) => {
             updateWordState(index, newItems);
-            if (newItems.join('') === wordData.word) {
+            const originalItems = newItems.map(item => item.split('-')[0]).join('');
+            if (originalItems === wordData.word) {
               handleWordSolved();
             }
           }}

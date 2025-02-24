@@ -28,7 +28,7 @@ h1 {
 
 .letter-tiles-container {
   display: flex;
-  gap: 10px;
+  gap: 5px; /* Reduced gap */
   padding: 10px;
   border: 1px dashed #ccc;
   border-radius: 4px;
@@ -38,8 +38,8 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 35px; /* Reduced width */
+  height: 35px; /* Reduced height */
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 4px;
