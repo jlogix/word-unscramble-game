@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { useInterval } from 'react-use';
 
 const words = [
-  "PYTHON", "JAVASCRIPT", "REACT", "HTML", "CSS", "NODE", "GITHUB", "TAILWIND", "BOOTSTRAP", "VITE", "APPLE", "BANANA"
+  "PYTHON", "JAVASCRIPT", "REACT", "HTML", "CSS", "NODE", "GITHUB", "TAILWIND", "BOOTSTRAP", "VITE", "APPLE", "BANANA", "ASSESS"
 ];
 
 function shuffleWord(word) {
@@ -75,7 +75,7 @@ function Word({ wordData, items, setItems, isBlinking, setIsBlinking }) {
 
   const handleDragEnd = (event) => {
     const { active, over } = event;
-    if (active && over && active.id !== over.id) {
+    if (active && over) {
       const oldIndex = items.indexOf(active.id);
       const newIndex = items.indexOf(over.id);
 
@@ -85,7 +85,8 @@ function Word({ wordData, items, setItems, isBlinking, setIsBlinking }) {
   };
 
   useEffect(() => {
-    if (items.join('') === word) {
+    const originalItems = items.map(item => item.split('-')[0]).join('');
+    if (originalItems === word) {
       setIsBlinking(true);
     }
   }, [items, word, setIsBlinking]);

@@ -83,3 +83,7 @@ h1 {
 .new-set-button:hover {
   background-color: #367c39;
 }
+
+.letter-tiles-container.blinking .letter-tile {
+  animation: blinker 1s linear infinite;
+}
